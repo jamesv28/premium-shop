@@ -14,7 +14,7 @@ import {
 import { useTheme } from "next-themes";
 
 const Menu = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <div className="flex justify-end gap-3">
@@ -48,6 +48,11 @@ const Menu = () => {
             <Button asChild variant="ghost">
               <Link href="/cart">
                 <ShoppingCartIcon /> Cart
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/sign-in">
+                <UserIcon /> Sign In
               </Link>
             </Button>
             <SheetDescription></SheetDescription>
