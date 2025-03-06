@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import ProductPrice from "./product-price";
+
 const ProductCard = ({ product }: { product: any }) => {
   return (
     <Card className="w-full max-w-sm">
