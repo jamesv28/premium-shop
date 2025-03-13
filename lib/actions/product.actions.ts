@@ -1,6 +1,5 @@
 "use server";
 import { prisma } from "@/db/prisma";
-import { convertToPlainObject } from "../utils";
 import { LATEST_PRODUCTS_LIMIT } from "../globals/index";
 
 export async function getLatestProducts() {
@@ -9,7 +8,12 @@ export async function getLatestProducts() {
     orderBy: { createdAt: "desc" },
   });
 
-  return convertToPlainObject(data);
+  // Map over the query result and convert Decimal's to Strings
+  return data.map((product) => ({
+    ...product,
+    price: product.price.toString(),
+    rating: product.rating.toString(),
+  }));
 }
 
 // get single product by its slug

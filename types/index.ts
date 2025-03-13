@@ -3,6 +3,6 @@ import { insertProductsSChema } from "@/lib/validators";
 
 export type Product = z.infer<typeof insertProductsSChema> & {
   id: string;
-  rating: number;
+  rating: string;
   createdAt: Date;
 };
