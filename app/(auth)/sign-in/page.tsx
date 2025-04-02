@@ -5,16 +5,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import CredentialsSigninForm from "./credentials-signin-form";
 import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { APP_NAME } from "@/lib/globals";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Sign In",
 };
-const SignInPageh2 = () => {
+const SignInPage = async () => {
+  const session = await auth();
+
+  if (session) {
+    return redirect("/");
+  }
+
   return (
     <div className="w-full max-w-md mx-auto">
       <Card className="">
@@ -33,10 +42,12 @@ const SignInPageh2 = () => {
             Sign In to your account.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">{/* form here */}</CardContent>
+        <CardContent className="space-y-4">
+          <CredentialsSigninForm />
+        </CardContent>
       </Card>
     </div>
   );
 };
 
-export default SignInPageh2;
+export default SignInPage;

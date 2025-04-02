@@ -4,14 +4,15 @@ import { prisma } from "./db/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compareSync } from "bcrypt-ts-edge";
 import type { NextAuthConfig } from "next-auth";
+
 export const config = {
   pages: {
     signIn: "/sign-in",
     error: "/sign-in",
   },
   session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
+    strategy: "jwt" as const,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -23,18 +24,21 @@ export const config = {
       async authorize(credentials) {
         if (credentials == null) return null;
 
+        // Find user in database
         const user = await prisma.user.findFirst({
           where: {
             email: credentials.email as string,
           },
         });
 
-        // check if the user exists
+        // Check if user exists and if the password matches
         if (user && user.password) {
-          const isMatch = compareSync(
+          const isMatch = await compareSync(
             credentials.password as string,
             user.password
           );
+
+          // If password is correct, return user
           if (isMatch) {
             return {
               id: user.id,
@@ -44,7 +48,7 @@ export const config = {
             };
           }
         }
-        // if user does not exist or password does not match and return null
+        // If user does not exist or password does not match return null
         return null;
       },
     }),
