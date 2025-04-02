@@ -6,6 +6,7 @@ import { signInDefaultValues } from "@/lib/globals";
 import { Button } from "@/components/ui/button";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { signInWithCredentials } from "@/lib/actions/user.actions";
 
 const CredentialsSigninForm = () => {
@@ -13,6 +14,9 @@ const CredentialsSigninForm = () => {
     success: false,
     message: "",
   });
+
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const SignInButton = () => {
     const { pending } = useFormStatus();
@@ -24,6 +28,7 @@ const CredentialsSigninForm = () => {
   };
   return (
     <form action={action}>
+      <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="mb-6">
         <Label htmlFor="email">Email</Label>
         <Input
